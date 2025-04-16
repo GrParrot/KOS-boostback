@@ -21,7 +21,6 @@ until (ship:status = "landed" or ship:status="splashed"){
         set gear to true.
         set wantedAcc to capVecMagnitude((targetVel - ship:velocity:surface)*2 , availableAcc) + ship:up:vector * getGravity().
         set steervec to -ship:velocity:surface.
-        set targetvelvec to vecDraw(v(0,0,0),steervec*5,red,"target",0.2,true,1).
         set ship:control:pilotmainthrottle to wantedAcc:mag / (availableThrust / ship:mass).
         set burning to true.
     }
