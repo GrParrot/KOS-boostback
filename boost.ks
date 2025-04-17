@@ -34,7 +34,7 @@ until false{
 
     set gravity to getGravVec().
     set midpointGrav to getMidGravVec().
-    set airfactor to max(min(ship:airspeed^2/250^2 * ship:body:atm:altitudepressure(ship:altitude) , 1), 0.5).
+    set airfactor to min(ship:airspeed^2/250^2 * ship:body:atm:altitudepressure(ship:altitude) , 1).
     set timeGuess to max(timeGuess-5,0.1).
     set prevDv to v(9999,9999,9999).
     until false{
@@ -68,7 +68,7 @@ until false{
     print("Aero drag = "+ aeroAcc:mag) at (0,9).
     print("throttle = "+ thrott) at(0,12).
 
-    if(aeroAcc:mag <2.5 and vDot(dV, (dV+ship:velocity:surface):normalized)<10 and dVmag<30){
+    if((airfactor<0.05 or ship:verticalSpeed<40) and vDot(dV, (dV+ship:velocity:surface):normalized)<10 and dVmag<30){
         set mode to 1.
         printAt("Entering glide phase.",0,5).
     }
@@ -103,7 +103,7 @@ until false{
     if((mode = 2 or mode = 4) and ship:airspeed/(maxAcc) > timeGuess and alt:radar<15000){
         set mode to 4.
         set ship:control:pilotmainthrottle to 0.
-        runpath("0:/suicideBurn.ks",groundoffset, debug).
+        runpath("0:/suicideBurn.ks",groundoffset).
         break.
         //set mode to 3.
     }
